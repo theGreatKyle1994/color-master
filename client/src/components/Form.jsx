@@ -1,4 +1,4 @@
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 const Form = ({ onSubmitHandler }) => {
@@ -7,7 +7,6 @@ const Form = ({ onSubmitHandler }) => {
     password: "",
     confirmPassword: "",
   });
-  const navigate = useNavigate();
   const currentPath = useLocation().pathname;
   const isLogin = () => currentPath == "/login";
 
