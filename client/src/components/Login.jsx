@@ -12,8 +12,8 @@ const Login = ({ setUserData }) => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         const userData = {
+          id: res.data._id,
           username: res.data.username,
           colors: res.data.colors,
           colorPalettes: res.data.colorPalettes,

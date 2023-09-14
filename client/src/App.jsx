@@ -5,7 +5,12 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 
 const App = () => {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({
+    id: "",
+    username: "",
+    colors: [],
+    colorPalettes: [],
+  });
 
   useEffect(() => {
     const data = JSON.parse(sessionStorage.getItem("userInfo"));
@@ -19,7 +24,10 @@ const App = () => {
         path="/register"
         element={<Register setUserData={setUserData} />}
       />
-      <Route path="/home" element={<Home userData={userData} />} />
+      <Route
+        path="/home"
+        element={<Home userData={userData} setUserData={setUserData} />}
+      />
     </Routes>
   );
 };
