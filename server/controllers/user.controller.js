@@ -3,10 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.FIRST_SECRET_KEY;
 
-module.exports.testMethod = (req, res) => {
-  res.json({ msg: "Success!" });
-};
-
 //* Register/Login/Logout a user
 module.exports = {
   registerUser: async (req, res) => {
