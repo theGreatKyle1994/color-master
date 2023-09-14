@@ -1,0 +1,7 @@
+.draggable {
+  list-style: none;
+  width: 150px;
+  user-select: none;
+  padding: 5px;
+  margin: 0 0 10px 10px;
+}
