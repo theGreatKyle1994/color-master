@@ -31,7 +31,7 @@ module.exports = {
         const userToken = jwt.sign({_id: newUser._id, username: newUser.username}, secret, {expiresIn: '1h'});
         console.log(userToken)
         //* Sending user data back to the client                                 2 Hours
-        res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge:2 * 60 * 60}).json(newUser);
+        res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge:2000 * 60 * 60}).json(newUser);
       }
     }
     catch(err){

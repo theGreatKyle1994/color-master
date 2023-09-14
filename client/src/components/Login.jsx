@@ -1,12 +1,30 @@
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Form from "./Form";
 
-const Login = () => {
+const Login = ({ setUserData }) => {
   const navigate = useNavigate();
 
-  const onSubmitHandler = (e, data) => {
+  const onSubmitHandler = async (e, data) => {
     e.preventDefault();
-    console.log("Login Data:", data);
+    await axios
+      .post("http://localhost:8000/api/login", data, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+        const userData = {
+          username: res.data.username,
+          colors: res.data.colors,
+          colorPalettes: res.data.colorPalettes,
+        };
+        sessionStorage.setItem("userInfo", JSON.stringify(userData));
+        setUserData(userData);
+        navigate("/home");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
   };
 
   return <Form onSubmitHandler={onSubmitHandler} />;
