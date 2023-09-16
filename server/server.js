@@ -16,7 +16,9 @@ app.use(express.json(), express.urlencoded({ extended: true }));
 //! if this is moved the app will break
 //! and Chris will be sad
 const UserRoutes = require("./routes/user.routes");
+const ColorRoutes = require("./routes/color.routes");
 UserRoutes(app);
+ColorRoutes(app);
 
 
 app.listen(port, () => console.log(`Server live on port: ${port}`));
