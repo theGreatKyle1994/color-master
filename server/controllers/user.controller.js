@@ -103,6 +103,7 @@ module.exports.updateUser = (req,res) => {
     });
 };
 
+
 //* Deletes a user
 module.exports.deleteUser = (req,res) => {
   User.deleteOne({_id: req.params.id})
