@@ -32,6 +32,7 @@ const Register = () => {
         navigate("/home");
       })
       .catch((err) => {
+        console.log(err.response.data);
         const { username, password, confirmPassword } =
           err.response.data.errors;
         setFormErrors({
