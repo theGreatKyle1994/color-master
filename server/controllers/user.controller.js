@@ -7,8 +7,8 @@ module.exports = {
   registerUser: async (req, res) => {
     const potentialUser = await User.findOne({ username: req.body.username });
     if (!potentialUser) {
-      const newUser = await User.create(req.body)
-        .then((res) => {
+      await User.create(req.body)
+        .then((newUser) => {
           const userToken = jwt.sign(
             { _id: newUser._id, username: newUser.username },
             secret,
