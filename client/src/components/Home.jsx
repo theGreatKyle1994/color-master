@@ -10,10 +10,10 @@ const Home = () => {
   const logoutHandler = async () => {
     await axios
       .post("http://localhost:8000/api/logout", {}, { withCredentials: true })
-      .then(() => {
+      .then((res) => {
+        setIsAuthenticated(false);
         sessionStorage.clear();
         setUserData({});
-        setIsAuthenticated(false);
       })
       .catch((err) => console.log(err));
   };

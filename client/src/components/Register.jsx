@@ -1,12 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Form from "./Form";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { globalContext } from "../App";
 
 const Register = () => {
   const navigate = useNavigate();
   const { setUserData, setIsAuthenticated } = useContext(globalContext);
+  const [formErrors, setFormErrors] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const onSubmitHandler = async (e, data) => {
     e.preventDefault();
@@ -27,11 +32,17 @@ const Register = () => {
         navigate("/home");
       })
       .catch((err) => {
-        console.log(err.response.data);
+        const { username, password, confirmPassword } =
+          err.response.data.errors;
+        setFormErrors({
+          username,
+          password,
+          confirmPassword,
+        });
       });
   };
 
-  return <Form onSubmitHandler={onSubmitHandler} />;
+  return <Form onSubmitHandler={onSubmitHandler} formErrors={formErrors} />;
 };
 
 export default Register;
