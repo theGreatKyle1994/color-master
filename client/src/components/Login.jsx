@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Form from "./Form";
+import { useContext } from "react";
+import { globalContext } from "../App";
 
-const Login = ({ setUserData }) => {
+const Login = () => {
   const navigate = useNavigate();
+  const { setUserData, setIsAuthenticated } = useContext(globalContext);
 
   const onSubmitHandler = async (e, data) => {
     e.preventDefault();
@@ -20,6 +23,7 @@ const Login = ({ setUserData }) => {
         };
         sessionStorage.setItem("userInfo", JSON.stringify(userData));
         setUserData(userData);
+        setIsAuthenticated(true);
         navigate("/home");
       })
       .catch((err) => {
