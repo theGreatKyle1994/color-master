@@ -6,10 +6,14 @@ const UserSchema = new mongoose.Schema(
     username: {
       type: String,
       required: [true, "Username is required"],
+      minLength: [3, "Username must be at least 3 characters."],
+      trim: true,
     },
     password: {
       type: String,
       required: [true, "Password is required"],
+      minLength: [8, "Password must be at least 8 characters."],
+      trim: true,
     },
     colors: {
       //* Associate user with colors -> ref allows us to populate this field with all colors assciated to user
@@ -29,9 +33,7 @@ UserSchema.virtual("confirmPassword")
 
 //* Compare Passwords
 UserSchema.pre("validate", function (next) {
-  // console.log("Made it to the validate function")
   if (this.password !== this.confirmPassword) {
-    // console.log("Passwordu do not match");
     this.invalidate("confirmPassword", "Passwords must match");
   }
   next();
@@ -41,7 +43,6 @@ UserSchema.pre("validate", function (next) {
 UserSchema.pre("save", function (next) {
   bcrypt.hash(this.password, 10).then((hash) => {
     this.password = hash;
-    console.log(hash)
     next();
   });
 });

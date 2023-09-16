@@ -1,7 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import "../css/Form.css";
 
-const Form = ({ onSubmitHandler }) => {
+const Form = ({ onSubmitHandler, formErrors }) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -19,9 +20,12 @@ const Form = ({ onSubmitHandler }) => {
   };
 
   return (
-    <form onSubmit={(e) => onSubmitHandler(e, formData)}>
+    <form id="form-container" onSubmit={(e) => onSubmitHandler(e, formData)}>
       <h2>{isLogin() ? "Log-In" : "Register"}</h2>
       <label htmlFor="form-username">User Name:</label>
+      {formErrors.username && (
+        <p className="error-msg">{formErrors.username.message}</p>
+      )}
       <input
         onChange={formHandler}
         id="form-username"
@@ -29,6 +33,9 @@ const Form = ({ onSubmitHandler }) => {
         name="username"
       />
       <label htmlFor="form-password">Password:</label>
+      {formErrors.password && (
+        <p className="error-msg">{formErrors.password.message}</p>
+      )}
       <input
         onChange={formHandler}
         id="form-password"
@@ -38,6 +45,9 @@ const Form = ({ onSubmitHandler }) => {
       {!isLogin() && (
         <>
           <label htmlFor="form-c-password">Confirm Password:</label>
+          {formErrors.confirmPassword && (
+            <p className="error-msg">{formErrors.confirmPassword.message}</p>
+          )}
           <input
             onChange={formHandler}
             id="form-c-password"
