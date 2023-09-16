@@ -10,7 +10,7 @@ module.exports.authenticate = (req, res, next) => {
     } else {
         console.log("JWT CONFIG: line 10", payload);
         // if user is authenticated add the user ID to the request object so that it can be accessed in the routes as needed
-        req.body.userID = payload._id
+        req.body.userId = payload._id
         next();
     }
     });

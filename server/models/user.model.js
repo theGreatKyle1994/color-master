@@ -12,7 +12,8 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Password is required"],
     },
     colors: {
-      type: Array,
+      //* Associate user with colors -> ref allows us to populate this field with all colors assciated to user
+      type: [{type: mongoose.ObjectId, ref: "Color"}],
     },
     colorPalettes: {
       type: Array,

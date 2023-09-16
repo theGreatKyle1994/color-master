@@ -1,15 +1,22 @@
 const Color = require("../models/color.model");
+const User = require("../models/user.model");
 
-// Add Color
-module.exports.addColor = (req, res) => {
-    Color.create(req.body)
-        .then(newColor => res.json(newColor))
-        .catch(err => res.status(400).json({message: "Error Adding Color",error: err}));
+// Add Favorite Color -> userId is included in the req.body by the authentication middleware
+module.exports.addColor = async (req, res) => {
+    try{
+        const newColor = await Color.create(req.body);
+        //* After adding color to color collection, add new color to the user's color array
+        const updatedUser = await User.findByIdAndUpdate(newColor.userId, {$addToSet: {colors: newColor._id}})
+        res.json(newColor)
+    }
+    catch(err){
+        res.status(400).json({message: "Error Adding Color",error: err});
+    }
 }
-    
-// Find all Colors
+
+// Find all Colors associated with user
 module.exports.findAllColors = (req, res) => {
-    Color.find()
+    Color.find({userId: req.body.userId})
         .then(allColors => res.json(allColors))
         .catch(err => res.status(400).json({message: 'Error Finding all Colors',error: err}))
 }
@@ -28,9 +35,15 @@ module.exports.updateColor = (req, res) => {
         .catch(err => res.status(400).json({message: 'Error Updating Color',error: err}))
 }
 
-// Delete One Color
-module.exports.deleteColor =(req, res) => {
-    Color.deleteOne({_id: req.params.id})
-        .then(deletedColor => res.json(deletedColor))
-        .catch(err => res.status(400).json({message: "Error Deleting Color", error: err}))
+// Delete One favorite -> userId is included in the req.body by the authentication middleware
+module.exports.deleteColor = async (req, res) => {
+    try{
+        deletedColor = await Color.deleteOne({_id: req.params.id});
+        //* After deleting color form color collection, remove color from user's color array
+        await User.findByIdAndUpdate(req.body.userId, {$pull: {colors: req.params.id}})
+        res.json(deletedColor)
+    }
+    catch(err){
+        res.status(400).json({message: "Error Deleting Color", error: err})
+    }
 }

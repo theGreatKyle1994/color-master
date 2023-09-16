@@ -41,12 +41,13 @@ module.exports = {
   //* Log the user in
   loginUser: async (req, res) => {
     try {
-      const potentialUser = await User.findOne({ username: req.body.username });
+      //* Populate the user's color array with colors associated with the user
+      const potentialUser = await User.findOne({ username: req.body.username }).populate("colors");
       if(potentialUser){
         const passwordsMatch = await bcrypt.compare(req.body.password, potentialUser.password);
         if(passwordsMatch){
           const userToken = jwt.sign({_id: potentialUser._id, username: potentialUser.username}, secret, {expiresIn: '1h'});
-          res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge:2 * 60 * 60}).json(potentialUser);
+          res.status(201).cookie('userToken', userToken, {httpOnly: true, maxAge:2000 * 60 * 60}).json(potentialUser);
           console.log('login successful')
         } else {
           //* Reject the request if the password does not match
