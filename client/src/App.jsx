@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
@@ -27,9 +27,10 @@ const App = () => {
       value={{ isAuthenticated, setIsAuthenticated, userData, setUserData }}
     >
       <Routes>
+        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
       </Routes>
     </globalContext.Provider>
   );
