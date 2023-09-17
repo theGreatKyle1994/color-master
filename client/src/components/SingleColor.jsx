@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import "../css/SingleColor.css";
 
 const SingleColor = ({ index, color }) => {
+  // Generate perm id for color instance
   const genID = useRef(uuid());
   const colorId = genID.current;
   const { r, g, b } = color;

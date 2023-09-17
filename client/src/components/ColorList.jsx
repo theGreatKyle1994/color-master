@@ -1,10 +1,63 @@
-import { useState, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { generateSingleColors } from "../utils/colorEngine";
 import SingleColor from "./SingleColor";
 
 const reducer = (state, action) => {
-  console.log(state, action.type);
+  const { source, destination } = action.type;
+  switch (source.droppableId) {
+    // From main-list
+    case "main-list": {
+      switch (destination.droppableId) {
+        // To main-list
+        case "main-list": {
+          const tempMainList = [...state.mainList];
+          const [reorderedItem] = tempMainList.splice(source.index, 1);
+          tempMainList.splice(destination.index, 0, reorderedItem);
+          return { ...state, mainList: tempMainList };
+        }
+        // To fav-list
+        case "fav-list": {
+          const tempMainList = [...state.mainList];
+          const [reorderedMainItem] = tempMainList.splice(source.index, 1);
+          const tempFavList = [...state.favList];
+          tempFavList.splice(destination.index, 0, reorderedMainItem);
+          return {
+            mainList: state.mainList.filter(
+              (_, index) => index !== source.index
+            ),
+            favList: tempFavList,
+          };
+        }
+      }
+    }
+    // From fav-list
+    case "fav-list": {
+      switch (destination.droppableId) {
+        // To main-list
+        case "main-list": {
+          const tempFavList = [...state.favList];
+          const [reorderedMainItem] = tempFavList.splice(source.index, 1);
+          const tempMainList = [...state.mainList];
+          tempMainList.splice(destination.index, 0, reorderedMainItem);
+          return {
+            mainList: tempMainList,
+            favList: state.favList.filter((_, index) => index !== source.index),
+          };
+        }
+        // To fav-list
+        case "fav-list": {
+          const tempFavList = [...state.favList];
+          const [reorderedItem] = tempFavList.splice(source.index, 1);
+          tempFavList.splice(destination.index, 0, reorderedItem);
+          return {
+            ...state,
+            favList: tempFavList,
+          };
+        }
+      }
+    }
+  }
 };
 
 const ColorList = () => {
@@ -12,75 +65,13 @@ const ColorList = () => {
     mainList: [...generateSingleColors(5)],
     favList: [...generateSingleColors(5)],
   });
-  const [leftList, setLeftList] = useState(generateSingleColors(5));
-  const [rightList, setRightList] = useState(generateSingleColors(5));
 
   const onDragEnd = (e) => {
     if (!e.destination) return;
     dispatch({ type: e });
-    switch (e.source.droppableId) {
-      case "main-list":
-        {
-          switch (e.destination.droppableId) {
-            case "main-list":
-              {
-                const tempLeftList = [...leftList];
-                const [reorderedItem] = tempLeftList.splice(e.source.index, 1);
-                tempLeftList.splice(e.destination.index, 0, reorderedItem);
-                setLeftList(tempLeftList);
-              }
-              break;
-            case "fav-list":
-              {
-                const tempLeftList = [...leftList];
-                const [reorderedLeftItem] = tempLeftList.splice(
-                  e.source.index,
-                  1
-                );
-                setLeftList((prevList) =>
-                  prevList.filter((_, index) => index !== e.source.index)
-                );
-
-                const tempRightList = [...rightList];
-                tempRightList.splice(e.destination.index, 0, reorderedLeftItem);
-                setRightList(tempRightList);
-              }
-              break;
-          }
-        }
-        break;
-      case "fav-list":
-        {
-          switch (e.destination.droppableId) {
-            case "main-list":
-              {
-                const tempRightList = [...rightList];
-                const [reorderedLeftItem] = tempRightList.splice(
-                  e.source.index,
-                  1
-                );
-                setRightList((prevList) =>
-                  prevList.filter((_, index) => index !== e.source.index)
-                );
-
-                const tempLeftList = [...leftList];
-                tempLeftList.splice(e.destination.index, 0, reorderedLeftItem);
-                setLeftList(tempLeftList);
-              }
-              break;
-            case "fav-list":
-              {
-                const tempRightList = [...rightList];
-                const [reorderedItem] = tempRightList.splice(e.source.index, 1);
-                tempRightList.splice(e.destination.index, 0, reorderedItem);
-                setRightList(tempRightList);
-              }
-              break;
-          }
-        }
-        break;
-    }
   };
+
+  // useEffect(() => console.log(state), [state]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -88,7 +79,7 @@ const ColorList = () => {
         {(provided) => (
           <ul ref={provided.innerRef}>
             <h2>List 1</h2>
-            {leftList.map((color, index) => (
+            {state.mainList.map((color, index) => (
               <SingleColor key={index} index={index} color={color} />
             ))}
             {provided.placeholder}
@@ -99,7 +90,7 @@ const ColorList = () => {
         {(provided) => (
           <ul ref={provided.innerRef}>
             <h2>List 2</h2>
-            {rightList.map((color, index) => (
+            {state.favList.map((color, index) => (
               <SingleColor key={index} index={index} color={color} />
             ))}
             {provided.placeholder}
