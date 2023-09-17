@@ -14,6 +14,7 @@ export const generateSingleColors = (count) => {
       r: genColor("random"),
       g: genColor("random"),
       b: genColor("random"),
+      _id: "none",
     });
   }
   return colorArr;

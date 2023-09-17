@@ -7,7 +7,7 @@ const SingleColor = ({ index, color }) => {
   // Generate perm id for color instance
   const genID = useRef(uuid());
   const colorId = genID.current;
-  const { r, g, b } = color;
+  const { r, g, b, _id } = color;
 
   return (
     <Draggable key={colorId} draggableId={colorId} index={index}>
@@ -24,7 +24,7 @@ const SingleColor = ({ index, color }) => {
             ref={provided.innerRef}
             style={listItemStyle}
           >
-            rgb({color.r}, {color.g}, {color.b})
+            rgb({color.r}, {color.g}, {color.b}) id: {_id}
           </li>
         );
       }}

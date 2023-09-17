@@ -26,6 +26,8 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => console.log(userData), [userData]);
+
   // Using global context to all children
   return (
     <globalContext.Provider
