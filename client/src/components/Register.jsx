@@ -6,6 +6,7 @@ import { globalContext } from "../App";
 
 const Register = () => {
   const navigate = useNavigate();
+  // Grabbing global context
   const { setUserData, setIsAuthenticated } = useContext(globalContext);
   const [formErrors, setFormErrors] = useState({
     username: "",
@@ -20,19 +21,21 @@ const Register = () => {
         withCredentials: true,
       })
       .then((res) => {
+        // Setting local data for application
         const userData = {
           id: res.data._id,
           username: res.data.username,
           colors: res.data.colors,
           colorPalettes: res.data.colorPalettes,
         };
+        // Setting session info for login outliving page refreshes
         sessionStorage.setItem("userInfo", JSON.stringify(userData));
         setUserData(userData);
         setIsAuthenticated(true);
         navigate("/home");
       })
       .catch((err) => {
-        console.log(err.response.data);
+        // On a failed register attempt; setup errors
         const { username, password, confirmPassword } =
           err.response.data.errors;
         setFormErrors({
