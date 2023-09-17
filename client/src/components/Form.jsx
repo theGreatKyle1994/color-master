@@ -8,9 +8,11 @@ const Form = ({ onSubmitHandler, formErrors }) => {
     password: "",
     confirmPassword: "",
   });
+  // Grabbing the path name for conditional rendering
   const currentPath = useLocation().pathname;
   const isLogin = () => currentPath == "/login";
 
+  // Handle all form data on change
   const formHandler = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({

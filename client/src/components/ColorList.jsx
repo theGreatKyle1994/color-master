@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { generateSingleColors } from "../utils/colorEngine";
 import SingleColor from "./SingleColor";
 
-const FavoriteList = () => {
+const reducer = (state, action) => {
+  console.log(state, action.type);
+};
+
+const ColorList = () => {
+  const [state, dispatch] = useReducer(reducer, {
+    mainList: [...generateSingleColors(5)],
+    favList: [...generateSingleColors(5)],
+  });
   const [leftList, setLeftList] = useState(generateSingleColors(5));
   const [rightList, setRightList] = useState(generateSingleColors(5));
 
   const onDragEnd = (e) => {
     if (!e.destination) return;
+    dispatch({ type: e });
     switch (e.source.droppableId) {
       case "main-list":
         {
@@ -101,4 +110,4 @@ const FavoriteList = () => {
   );
 };
 
-export default FavoriteList;
+export default ColorList;
