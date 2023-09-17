@@ -27,7 +27,7 @@ const PaletteSchema = new mongoose.Schema(
                 g: Number,
                 b: Number
             },
-            userId: {type: mongoose.ObjectId, ref: ""}
+            userId: {type: mongoose.ObjectId, ref: "User"}
         },
         {timestamps: true}
     )
