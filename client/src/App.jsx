@@ -26,7 +26,17 @@ const App = () => {
     }
   }, []);
 
-  useEffect(() => console.log(userData), [userData]);
+  useEffect(() => {
+    const data = JSON.parse(sessionStorage.getItem("userInfo"));
+    if (data) {
+      const newData = {
+        ...data,
+        colors: userData.colors,
+        colorPalettes: userData.colorPalettes,
+      };
+      sessionStorage.setItem("userInfo", JSON.stringify(newData));
+    }
+  }, [userData]);
 
   // Using global context to all children
   return (
