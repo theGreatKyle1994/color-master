@@ -39,8 +39,8 @@ module.exports = {
   },
   // Login user
   loginUser: async (req, res) => {
-    // Find user by username
-    const potentialUser = await User.findOne({ username: req.body.username });
+    //* Populate user's color and palette arrays with colors and palettes that match the IDs in the arrays
+    const potentialUser = await User.findOne({ username: req.body.username }).populate("colors").populate("colorPalettes");
     // If user exists prepare to compare passwords
     if (potentialUser) {
       // Compare passwords

@@ -17,8 +17,10 @@ app.use(express.json(), express.urlencoded({ extended: true }));
 //! and Chris will be sad
 const UserRoutes = require("./routes/user.routes");
 const ColorRoutes = require("./routes/color.routes");
+const PaletteRoutes = require("./routes/palette.routes");
 UserRoutes(app);
 ColorRoutes(app);
+PaletteRoutes(app);
 
 
 app.listen(port, () => console.log(`Server live on port: ${port}`));

@@ -16,10 +16,12 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
     colors: {
-      type: Array,
+      //* Associate user with colors -> ref allows us to populate this field with all colors assciated to user
+      type: [{type: mongoose.ObjectId, ref: "Color"}],
     },
     colorPalettes: {
-      type: Array,
+      //* Associate user with palettes -> ref allows us to populate this field with all palettes assciated to user
+      type: [{type: mongoose.ObjectId, ref: "Palette"}],
     },
   },
   { timestamps: true }
