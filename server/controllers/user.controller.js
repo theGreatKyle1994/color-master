@@ -32,8 +32,8 @@ module.exports = {
     }
   },
   loginUser: async (req, res) => {
-    //* Populate user's color array with colors that match color IDs in the array
-    const potentialUser = await User.findOne({ username: req.body.username }).populate("colors");
+    //* Populate user's color and palette arrays with colors and palettes that match the IDs in the arrays
+    const potentialUser = await User.findOne({ username: req.body.username }).populate("colors").populate("colorPalettes");
     if (potentialUser) {
       if (await bcrypt.compare(req.body.password, potentialUser.password)) {
         const userToken = jwt.sign(
