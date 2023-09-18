@@ -31,7 +31,8 @@ const ColorList = () => {
             setUserData((prevData) => ({ ...prevData, colors: res.data }))
           )
           .catch((err) => {
-            if (err.response.data.verified == false) logout();
+            if (err.response.data.verified == false)
+              logout(setIsAuthenticated, setUserData);
           });
       })();
     }
@@ -114,7 +115,8 @@ const ColorList = () => {
             }));
           })
           .catch((err) => {
-            if (err.response.data.verified == false) logout();
+            if (err.response.data.verified == false)
+              logout(setIsAuthenticated, setUserData);
           });
       })();
     }

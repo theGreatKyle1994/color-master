@@ -1,5 +1,7 @@
+import axios from "axios";
+
 // Handle logout
-const logout = async () => {
+const logout = async (setIsAuthenticated, setUserData) => {
   await axios
     .post("http://localhost:8000/api/logout", {}, { withCredentials: true })
     .then((res) => {

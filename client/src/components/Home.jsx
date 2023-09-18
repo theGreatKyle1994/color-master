@@ -14,7 +14,11 @@ const Home = () => {
     <>
       <h1>Welcome {isAuthenticated ? userData.username : "Guest"}!</h1>
       <ColorList />
-      {isAuthenticated && <button onClick={logout}>Logout</button>}
+      {isAuthenticated && (
+        <button onClick={() => logout(setIsAuthenticated, setUserData)}>
+          Logout
+        </button>
+      )}
       {!isAuthenticated && <Link to={"/login"}>Login</Link>}
     </>
   );
