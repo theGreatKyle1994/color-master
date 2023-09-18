@@ -5,10 +5,12 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { generateSingleColors } from "../utils/colorEngine";
 import { sortLists } from "../utils/listSortingAlgos";
 import SingleColor from "./SingleColor";
+import logout from "../utils/logout";
 import "../css/ColorList.css";
 
 const ColorList = () => {
-  const { userData, setUserData, isAuthenticated } = useContext(globalContext);
+  const { userData, setUserData, isAuthenticated, setIsAuthenticated } =
+    useContext(globalContext);
   const [colorLists, setColorLists] = useState({
     mainList: [...generateSingleColors(5)],
     mainList2: [...generateSingleColors(5)],
@@ -28,20 +30,22 @@ const ColorList = () => {
           .then((res) =>
             setUserData((prevData) => ({ ...prevData, colors: res.data }))
           )
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            if (err.response.data.verified == false) logout();
+          });
       })();
     }
   }, []);
 
-  // Grabs color lists once from the userData in app
-  useEffect(
-    () =>
+  // Sets color fav list once from the userData in app after authentication
+  useEffect(() => {
+    if (isAuthenticated) {
       setColorLists((prevLists) => ({
         ...prevLists,
         favList: userData.colors,
-      })),
-    [isAuthenticated]
-  );
+      }));
+    }
+  }, [isAuthenticated]);
 
   // When the favList changes, we update the userData in app to match
   // This includes the order of the fav list (local only)
@@ -54,10 +58,10 @@ const ColorList = () => {
     [colorLists.favList]
   );
 
+  // Deletion request to db when color is moved outside of fav list
   useEffect(() => {
     if (colorLists.delColor !== "") {
       (async () => {
-        // Deletion request to db when color is moved outside of fav list
         await axios
           .delete(
             `http://localhost:8000/api/colors/${colorLists.delColor._id}`,
@@ -80,7 +84,9 @@ const ColorList = () => {
               delColor: "",
             }));
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            if (err.response.data.verified == false) logout();
+          });
       })();
     }
   }, [colorLists.delColor]);
@@ -107,7 +113,9 @@ const ColorList = () => {
               delColor: "",
             }));
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            if (err.response.data.verified == false) logout();
+          });
       })();
     }
   }, [colorLists.newColor]);

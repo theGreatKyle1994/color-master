@@ -40,8 +40,6 @@ const App = () => {
     }
   }, [userData]);
 
-  // useEffect(() => console.log(userData.colors), [userData.colors]);
-
   // Using global context to all children
   return (
     <globalContext.Provider
