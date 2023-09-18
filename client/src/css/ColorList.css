@@ -1,8 +1,9 @@
 .drop-container {
-  max-height: 300px;
-  overflow-y: scroll;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
   scroll-behavior: smooth;
-  min-height: 75px;
   border: 2px solid black;
   margin: 5px;
 }

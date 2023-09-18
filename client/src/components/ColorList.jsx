@@ -159,7 +159,7 @@ const ColorList = () => {
 
   return (
     <DragDropContext onDragEnd={sortLists}>
-      <Droppable droppableId="main-list">
+      <Droppable droppableId="main-list" direction="horizontal">
         {(provided) => (
           <>
             <h2>Main List</h2>
@@ -174,7 +174,7 @@ const ColorList = () => {
         )}
       </Droppable>
       {isAuthenticated && (
-        <Droppable droppableId="fav-list">
+        <Droppable droppableId="fav-list" direction="horizontal">
           {(provided) => (
             <>
               <h2>Fav List</h2>
@@ -185,11 +185,11 @@ const ColorList = () => {
                     {colorLists.favList.map((color, index) => (
                       <SingleColor key={index} index={index} color={color} />
                     ))}
-                    {provided.placeholder}
                   </>
                 ) : (
                   <p id="fav-placeholder">Get Favs!</p>
                 )}
+                {provided.placeholder}
               </ul>
             </>
           )}
