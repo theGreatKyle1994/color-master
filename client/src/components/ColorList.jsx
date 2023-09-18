@@ -37,7 +37,8 @@ const ColorList = () => {
             const tempMainList = [...colorLists.mainList];
             let [reorderedMainItem] = tempMainList.splice(source.index, 1);
             const tempFavList = [...colorLists.favList];
-            // Deletion request to db when color is moved outside of fav list
+            // The color id is needed for deletion, we use this request to override the local
+            // version with the db version and keep its placement in the list
             await axios
               .post("http://localhost:8000/api/colors", reorderedMainItem, {
                 withCredentials: true,
@@ -65,8 +66,7 @@ const ColorList = () => {
             const [reorderedFavItem] = tempFavList.splice(source.index, 1);
             const tempMainList = [...colorLists.mainList];
             tempMainList.splice(destination.index, 0, reorderedFavItem);
-            // The color id is needed for deletion, we use this request to override the local
-            // version with the db version and keep its placement in the list
+            // Deletion request to db when color is moved outside of fav list
             await axios
               .delete(
                 `http://localhost:8000/api/colors/${reorderedFavItem._id}`,
@@ -124,9 +124,10 @@ const ColorList = () => {
         {(provided) => (
           <ul ref={provided.innerRef}>
             <h2>Main List</h2>
-            {colorLists.mainList.map((color, index) => (
-              <SingleColor key={index} index={index} color={color} />
-            ))}
+            {colorLists.mainList &&
+              colorLists.mainList.map((color, index) => (
+                <SingleColor key={index} index={index} color={color} />
+              ))}
             {provided.placeholder}
           </ul>
         )}
@@ -136,9 +137,10 @@ const ColorList = () => {
           {(provided) => (
             <ul ref={provided.innerRef}>
               <h2>Fav List</h2>
-              {colorLists.favList.map((color, index) => (
-                <SingleColor key={index} index={index} color={color} />
-              ))}
+              {colorLists.favList &&
+                colorLists.favList.map((color, index) => (
+                  <SingleColor key={index} index={index} color={color} />
+                ))}
               {provided.placeholder}
             </ul>
           )}
