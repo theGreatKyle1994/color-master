@@ -3,95 +3,45 @@ import axios from "axios";
 import { globalContext } from "../App";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { generateSingleColors } from "../utils/colorEngine";
+import { sortLists } from "../utils/listSortingAlgos";
 import SingleColor from "./SingleColor";
 import "../css/ColorList.css";
 
 const ColorList = () => {
   const { userData, setUserData, isAuthenticated } = useContext(globalContext);
   const [colorLists, setColorLists] = useState({
-    mainList: [...generateSingleColors(15)],
+    mainList: [...generateSingleColors(5)],
+    mainList2: [...generateSingleColors(5)],
     favList: [],
     newColor: "",
     delColor: "",
   });
 
-  const sortLists = async (e) => {
-    const { source, destination } = e;
-    // If item is dragged outside of viable list, auto return to prevent crash
-    if (!destination) return;
-    if (!source.droppableId || !destination.droppableId) return;
-    switch (source.droppableId) {
-      // From main-list
-      case "main-list": {
-        switch (destination.droppableId) {
-          // To main-list
-          case "main-list": {
-            const tempMainList = [...colorLists.mainList];
-            const [reorderedItem] = tempMainList.splice(source.index, 1);
-            tempMainList.splice(destination.index, 0, reorderedItem);
-            setColorLists((prevLists) => ({
-              ...prevLists,
-              mainList: tempMainList,
-              newColor: "",
-              delColor: "",
-            }));
-            break;
-          }
-          // To fav-list
-          case "fav-list": {
-            const tempMainList = [...colorLists.mainList];
-            let [reorderedMainItem] = tempMainList.splice(source.index, 1);
-            const tempFavList = [...colorLists.favList];
-            tempFavList.splice(destination.index, 0, reorderedMainItem);
-            setColorLists((prevLists) => ({
-              mainList: prevLists.mainList.filter(
-                (_, index) => index !== source.index
-              ),
-              favList: tempFavList,
-              newColor: reorderedMainItem,
-              delColor: "",
-            }));
-            break;
-          }
-        }
-        break;
-      }
-      // From fav-list
-      case "fav-list": {
-        switch (destination.droppableId) {
-          // To main-list
-          case "main-list": {
-            const tempFavList = [...colorLists.favList];
-            const [reorderedFavItem] = tempFavList.splice(source.index, 1);
-            const tempMainList = [...colorLists.mainList];
-            tempMainList.splice(destination.index, 0, reorderedFavItem);
-            setColorLists((prevLists) => ({
-              mainList: tempMainList,
-              favList: prevLists.favList.filter(
-                (_, index) => index !== source.index
-              ),
-              newColor: "",
-              delColor: reorderedFavItem,
-            }));
-            break;
-          }
-          // To fav-list
-          case "fav-list": {
-            const tempFavList = [...colorLists.favList];
-            const [reorderedItem] = tempFavList.splice(source.index, 1);
-            tempFavList.splice(destination.index, 0, reorderedItem);
-            setColorLists((prevLists) => ({
-              ...prevLists,
-              favList: tempFavList,
-              newColor: "",
-              delColor: "",
-            }));
-            break;
-          }
-        }
-      }
+  // Grab colors from database on load
+  useEffect(() => {
+    if (userData.id) {
+      (async () => {
+        await axios
+          .get(`http://localhost:8000/api/colors`, {
+            withCredentials: true,
+          })
+          .then((res) =>
+            setUserData((prevData) => ({ ...prevData, colors: res.data }))
+          )
+          .catch((err) => console.log(err));
+      })();
     }
-  };
+  }, []);
+
+  // Grabs color lists once from the userData in app
+  useEffect(
+    () =>
+      setColorLists((prevLists) => ({
+        ...prevLists,
+        favList: userData.colors,
+      })),
+    [isAuthenticated]
+  );
 
   // When the favList changes, we update the userData in app to match
   // This includes the order of the fav list (local only)
@@ -102,16 +52,6 @@ const ColorList = () => {
         colors: colorLists.favList,
       })),
     [colorLists.favList]
-  );
-
-  // Grabs color lists once from the userData in app
-  useEffect(
-    () =>
-      setColorLists((prevLists) => ({
-        ...prevLists,
-        favList: userData.colors,
-      })),
-    [isAuthenticated]
   );
 
   useEffect(() => {
@@ -125,6 +65,21 @@ const ColorList = () => {
               withCredentials: true,
             }
           )
+          .then(() => {
+            setColorLists((prevLists) => ({
+              ...prevLists,
+              mainList: prevLists.mainList.map((color) => {
+                if (color == prevLists.delColor) delete color._id;
+                return color;
+              }),
+              mainList2: prevLists.mainList2.map((color) => {
+                if (color == prevLists.delColor) delete color._id;
+                return color;
+              }),
+              newColor: "",
+              delColor: "",
+            }));
+          })
           .catch((err) => console.log(err));
       })();
     }
@@ -158,7 +113,7 @@ const ColorList = () => {
   }, [colorLists.newColor]);
 
   return (
-    <DragDropContext onDragEnd={sortLists}>
+    <DragDropContext onDragEnd={(e) => sortLists(e, colorLists, setColorLists)}>
       <Droppable droppableId="main-list" direction="horizontal">
         {(provided) => (
           <>
@@ -171,6 +126,17 @@ const ColorList = () => {
               {provided.placeholder}
             </ul>
           </>
+        )}
+      </Droppable>
+      <Droppable droppableId="main-list2" direction="horizontal">
+        {(provided) => (
+          <ul ref={provided.innerRef} className="drop-container">
+            {colorLists.mainList2 &&
+              colorLists.mainList2.map((color, index) => (
+                <SingleColor key={index} index={index} color={color} />
+              ))}
+            {provided.placeholder}
+          </ul>
         )}
       </Droppable>
       {isAuthenticated && (

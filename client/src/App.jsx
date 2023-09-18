@@ -40,20 +40,6 @@ const App = () => {
     }
   }, [userData]);
 
-  // Graab colors from database only on authentication change
-  useEffect(() => {
-    if (userData.id) {
-      (async () => {
-        await axios
-          .get(`http://localhost:8000/api/colors`, {
-            withCredentials: true,
-          })
-          .then((res) => setUserData({ ...userData, colors: res.data }))
-          .catch((err) => console.log(err));
-      })();
-    }
-  }, [isAuthenticated]);
-
   // useEffect(() => console.log(userData.colors), [userData.colors]);
 
   // Using global context to all children
@@ -67,6 +53,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/*" element={<Navigate to="/home" />} />
       </Routes>
     </globalContext.Provider>
   );
