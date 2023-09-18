@@ -1,7 +1,16 @@
+/* To be changed */
+
 .draggable {
   list-style: none;
-  width: 150px;
   user-select: none;
   padding: 5px;
-  margin: 0 0 10px 10px;
+  margin: 10px 10px 0 10px;
+}
+
+h2 {
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
 }

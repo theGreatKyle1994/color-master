@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useMemo, memo } from "react";
 import axios from "axios";
 import { globalContext } from "../App";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
@@ -14,6 +14,9 @@ const ColorList = () => {
 
   const sortLists = async (e) => {
     const { source, destination } = e;
+    // If item is dragged outside of viable list, auto return to prevent crash
+    if (!destination) return;
+    if (!source.droppableId || !destination.droppableId) return;
     switch (source.droppableId) {
       // From main-list
       case "main-list": {
@@ -32,8 +35,15 @@ const ColorList = () => {
           // To fav-list
           case "fav-list": {
             const tempMainList = [...colorLists.mainList];
-            const [reorderedMainItem] = tempMainList.splice(source.index, 1);
+            let [reorderedMainItem] = tempMainList.splice(source.index, 1);
             const tempFavList = [...colorLists.favList];
+            // Deletion request to db when color is moved outside of fav list
+            await axios
+              .post("http://localhost:8000/api/colors", reorderedMainItem, {
+                withCredentials: true,
+              })
+              .then((res) => (reorderedMainItem = res.data))
+              .catch((err) => console.log(err));
             tempFavList.splice(destination.index, 0, reorderedMainItem);
             setColorLists((prevLists) => ({
               mainList: prevLists.mainList.filter(
@@ -55,6 +65,14 @@ const ColorList = () => {
             const [reorderedFavItem] = tempFavList.splice(source.index, 1);
             const tempMainList = [...colorLists.mainList];
             tempMainList.splice(destination.index, 0, reorderedFavItem);
+            // The color id is needed for deletion, we use this request to override the local
+            // version with the db version and keep its placement in the list
+            await axios
+              .delete(
+                `http://localhost:8000/api/colors/${reorderedFavItem._id}`,
+                { withCredentials: true }
+              )
+              .catch((err) => console.log(err));
             setColorLists((prevLists) => ({
               mainList: tempMainList,
               favList: prevLists.favList.filter(
@@ -79,6 +97,8 @@ const ColorList = () => {
     }
   };
 
+  // When the favList changes, we update the userData in app to match
+  // This includes the order of the fav list (local only)
   useEffect(
     () =>
       setUserData((prevData) => ({
@@ -88,12 +108,22 @@ const ColorList = () => {
     [colorLists.favList]
   );
 
+  // Grabs color lists once from the userData in app
+  useEffect(
+    () =>
+      setColorLists((prevLists) => ({
+        ...prevLists,
+        favList: userData.colors,
+      })),
+    [isAuthenticated]
+  );
+
   return (
     <DragDropContext onDragEnd={sortLists}>
       <Droppable droppableId="main-list">
         {(provided) => (
           <ul ref={provided.innerRef}>
-            <h2>List 1</h2>
+            <h2>Main List</h2>
             {colorLists.mainList.map((color, index) => (
               <SingleColor key={index} index={index} color={color} />
             ))}
@@ -105,7 +135,7 @@ const ColorList = () => {
         <Droppable droppableId="fav-list">
           {(provided) => (
             <ul ref={provided.innerRef}>
-              <h2>List 2</h2>
+              <h2>Fav List</h2>
               {colorLists.favList.map((color, index) => (
                 <SingleColor key={index} index={index} color={color} />
               ))}

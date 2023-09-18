@@ -7,12 +7,14 @@ const SingleColor = ({ index, color }) => {
   // Generate perm id for color instance
   const genID = useRef(uuid());
   const colorId = genID.current;
-  const { r, g, b, _id } = color;
+  const { r, g, b, _id = "none" } = color;
 
   return (
     <Draggable key={colorId} draggableId={colorId} index={index}>
       {(provided) => {
+        // Set the background color to the imported color data
         const listItemStyle = {
+          // This is required to maintain css state between drags
           ...provided.draggableProps.style,
           backgroundColor: `rgb(${r}, ${g}, ${b})`,
         };
@@ -24,7 +26,10 @@ const SingleColor = ({ index, color }) => {
             ref={provided.innerRef}
             style={listItemStyle}
           >
-            rgb({color.r}, {color.g}, {color.b}) id: {_id}
+            <div>
+              rgb({color.r}, {color.g}, {color.b})
+            </div>
+            <div>id: {_id}</div>
           </li>
         );
       }}

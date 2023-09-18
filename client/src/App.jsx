@@ -1,5 +1,6 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, memo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import axios from "axios";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
@@ -26,6 +27,7 @@ const App = () => {
     }
   }, []);
 
+  // When userData changes, we update the session info to match
   useEffect(() => {
     const data = JSON.parse(sessionStorage.getItem("userInfo"));
     if (data) {
@@ -37,6 +39,22 @@ const App = () => {
       sessionStorage.setItem("userInfo", JSON.stringify(newData));
     }
   }, [userData]);
+
+  // Graab colors from database only on authentication change
+  useEffect(() => {
+    if (userData.id) {
+      (async () => {
+        await axios
+          .get(`http://localhost:8000/api/colors`, {
+            withCredentials: true,
+          })
+          .then((res) => setUserData({ ...userData, colors: res.data }))
+          .catch((err) => console.log(err));
+      })();
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => console.log(userData.colors), [userData.colors]);
 
   // Using global context to all children
   return (
