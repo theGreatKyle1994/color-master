@@ -1,15 +1,18 @@
-import { useEffect, useState, useContext, useMemo, memo } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { globalContext } from "../App";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { generateSingleColors } from "../utils/colorEngine";
 import SingleColor from "./SingleColor";
+import "../css/ColorList.css";
 
 const ColorList = () => {
   const { userData, setUserData, isAuthenticated } = useContext(globalContext);
   const [colorLists, setColorLists] = useState({
-    mainList: [...generateSingleColors(5)],
+    mainList: [...generateSingleColors(15)],
     favList: [],
+    newColor: "",
+    delColor: "",
   });
 
   const sortLists = async (e) => {
@@ -29,6 +32,8 @@ const ColorList = () => {
             setColorLists((prevLists) => ({
               ...prevLists,
               mainList: tempMainList,
+              newColor: "",
+              delColor: "",
             }));
             break;
           }
@@ -37,20 +42,14 @@ const ColorList = () => {
             const tempMainList = [...colorLists.mainList];
             let [reorderedMainItem] = tempMainList.splice(source.index, 1);
             const tempFavList = [...colorLists.favList];
-            // The color id is needed for deletion, we use this request to override the local
-            // version with the db version and keep its placement in the list
-            await axios
-              .post("http://localhost:8000/api/colors", reorderedMainItem, {
-                withCredentials: true,
-              })
-              .then((res) => (reorderedMainItem = res.data))
-              .catch((err) => console.log(err));
             tempFavList.splice(destination.index, 0, reorderedMainItem);
             setColorLists((prevLists) => ({
               mainList: prevLists.mainList.filter(
                 (_, index) => index !== source.index
               ),
               favList: tempFavList,
+              newColor: reorderedMainItem,
+              delColor: "",
             }));
             break;
           }
@@ -66,18 +65,13 @@ const ColorList = () => {
             const [reorderedFavItem] = tempFavList.splice(source.index, 1);
             const tempMainList = [...colorLists.mainList];
             tempMainList.splice(destination.index, 0, reorderedFavItem);
-            // Deletion request to db when color is moved outside of fav list
-            await axios
-              .delete(
-                `http://localhost:8000/api/colors/${reorderedFavItem._id}`,
-                { withCredentials: true }
-              )
-              .catch((err) => console.log(err));
             setColorLists((prevLists) => ({
               mainList: tempMainList,
               favList: prevLists.favList.filter(
                 (_, index) => index !== source.index
               ),
+              newColor: "",
+              delColor: reorderedFavItem,
             }));
             break;
           }
@@ -89,6 +83,8 @@ const ColorList = () => {
             setColorLists((prevLists) => ({
               ...prevLists,
               favList: tempFavList,
+              newColor: "",
+              delColor: "",
             }));
             break;
           }
@@ -118,31 +114,84 @@ const ColorList = () => {
     [isAuthenticated]
   );
 
+  useEffect(() => {
+    if (colorLists.delColor !== "") {
+      (async () => {
+        // Deletion request to db when color is moved outside of fav list
+        await axios
+          .delete(
+            `http://localhost:8000/api/colors/${colorLists.delColor._id}`,
+            {
+              withCredentials: true,
+            }
+          )
+          .catch((err) => console.log(err));
+      })();
+    }
+  }, [colorLists.delColor]);
+
+  useEffect(() => {
+    if (colorLists.newColor !== "") {
+      (async () => {
+        // The color id is needed for deletion, we use this request to override the local
+        // version with the db version and keep its placement in the list
+        await axios
+          .post("http://localhost:8000/api/colors", colorLists.newColor, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            setColorLists((prevLists) => ({
+              ...prevLists,
+              favList: prevLists.favList.map((color) => {
+                if (color == prevLists.newColor) {
+                  color._id = res.data._id;
+                }
+                return color;
+              }),
+              newColor: "",
+              delColor: "",
+            }));
+          })
+          .catch((err) => console.log(err));
+      })();
+    }
+  }, [colorLists.newColor]);
+
   return (
     <DragDropContext onDragEnd={sortLists}>
       <Droppable droppableId="main-list">
         {(provided) => (
-          <ul ref={provided.innerRef}>
+          <>
             <h2>Main List</h2>
-            {colorLists.mainList &&
-              colorLists.mainList.map((color, index) => (
-                <SingleColor key={index} index={index} color={color} />
-              ))}
-            {provided.placeholder}
-          </ul>
+            <ul ref={provided.innerRef} className="drop-container">
+              {colorLists.mainList &&
+                colorLists.mainList.map((color, index) => (
+                  <SingleColor key={index} index={index} color={color} />
+                ))}
+              {provided.placeholder}
+            </ul>
+          </>
         )}
       </Droppable>
       {isAuthenticated && (
         <Droppable droppableId="fav-list">
           {(provided) => (
-            <ul ref={provided.innerRef}>
+            <>
               <h2>Fav List</h2>
-              {colorLists.favList &&
-                colorLists.favList.map((color, index) => (
-                  <SingleColor key={index} index={index} color={color} />
-                ))}
-              {provided.placeholder}
-            </ul>
+
+              <ul ref={provided.innerRef} className="drop-container">
+                {colorLists.favList && colorLists.favList.length !== 0 ? (
+                  <>
+                    {colorLists.favList.map((color, index) => (
+                      <SingleColor key={index} index={index} color={color} />
+                    ))}
+                    {provided.placeholder}
+                  </>
+                ) : (
+                  <p id="fav-placeholder">Get Favs!</p>
+                )}
+              </ul>
+            </>
           )}
         </Droppable>
       )}

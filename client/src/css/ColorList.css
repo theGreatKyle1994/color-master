@@ -1,0 +1,15 @@
+.drop-container {
+  max-height: 300px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  min-height: 75px;
+  border: 2px solid black;
+  margin: 5px;
+}
+
+#fav-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

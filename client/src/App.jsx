@@ -54,7 +54,7 @@ const App = () => {
     }
   }, [isAuthenticated]);
 
-  useEffect(() => console.log(userData.colors), [userData.colors]);
+  // useEffect(() => console.log(userData.colors), [userData.colors]);
 
   // Using global context to all children
   return (
