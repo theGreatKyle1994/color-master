@@ -1,10 +1,10 @@
 import { useEffect, useState, createContext, memo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Header from "./components/Header";
+import Color from "./components/Color";
 // Creating global context
 export const globalContext = createContext();
 
@@ -51,6 +51,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/color/create" element={<Color />} />
         <Route path="/*" element={<Navigate to="/home" />} />
       </Routes>
     </globalContext.Provider>
