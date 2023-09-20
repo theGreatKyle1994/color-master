@@ -6,7 +6,7 @@
   min-height: 110px;
 }
 
-.drop-container::-webkit-scrollbar-thumb {
+.drop-container::-webkit-scrollbar {
   display: none;
 }
 
