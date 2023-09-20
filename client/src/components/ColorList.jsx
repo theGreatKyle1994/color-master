@@ -86,7 +86,8 @@ const ColorList = () => {
             }));
           })
           .catch((err) => {
-            if (err.response.data.verified == false) logout();
+            if (err.response.data.verified == false)
+              logout(setIsAuthenticated, setUserData);
           });
       })();
     }
@@ -131,7 +132,12 @@ const ColorList = () => {
             <ul ref={provided.innerRef} className="drop-container">
               {colorLists.mainList &&
                 colorLists.mainList.map((color, index) => (
-                  <SingleColor key={index} index={index} color={color} />
+                  <SingleColor
+                    key={index}
+                    index={index}
+                    color={color}
+                    isFav={false}
+                  />
                 ))}
               {provided.placeholder}
             </ul>
@@ -143,7 +149,12 @@ const ColorList = () => {
           <ul ref={provided.innerRef} className="drop-container">
             {colorLists.mainList2 &&
               colorLists.mainList2.map((color, index) => (
-                <SingleColor key={index} index={index} color={color} />
+                <SingleColor
+                  key={index}
+                  index={index}
+                  color={color}
+                  isFav={false}
+                />
               ))}
             {provided.placeholder}
           </ul>
@@ -154,12 +165,16 @@ const ColorList = () => {
           {(provided) => (
             <>
               <h2>Fav List</h2>
-
               <ul ref={provided.innerRef} className="drop-container">
                 {colorLists.favList && colorLists.favList.length !== 0 ? (
                   <>
                     {colorLists.favList.map((color, index) => (
-                      <SingleColor key={index} index={index} color={color} />
+                      <SingleColor
+                        key={index}
+                        index={index}
+                        color={color}
+                        isFav={true}
+                      />
                     ))}
                   </>
                 ) : (

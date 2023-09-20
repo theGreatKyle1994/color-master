@@ -1,12 +1,15 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import "../css/SingleColor.css";
 
-const SingleColor = ({ index, color }) => {
+const SingleColor = ({ index, color, isFav }) => {
   // Generate perm id for color instance
   const genID = useRef(uuid());
   const colorId = genID.current;
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
   const { r, g, b, _id = "none" } = color;
 
   return (
@@ -25,7 +28,19 @@ const SingleColor = ({ index, color }) => {
             {...provided.dragHandleProps}
             ref={provided.innerRef}
             style={listItemStyle}
+            onMouseOver={() => {
+              if (isFav) setIsHovered(true);
+            }}
+            onMouseOut={() => {
+              if (isFav) setIsHovered(false);
+            }}
           >
+            <button
+              onClick={() => navigate(`/color/edit/${_id}`)}
+              style={{ display: isHovered ? "inline" : "none" }}
+            >
+              Edit
+            </button>
             <div>
               rgb({color.r}, {color.g}, {color.b})
             </div>

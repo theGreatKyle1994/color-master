@@ -52,6 +52,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/color/create" element={<Color />} />
+        <Route path="/color/edit/:id" element={<Color />} />
         <Route path="/*" element={<Navigate to="/home" />} />
       </Routes>
     </globalContext.Provider>
