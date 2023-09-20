@@ -23,8 +23,8 @@
 
 @media (min-width: 1300px) {
   .draggable {
-    min-width: 6rem;
-    min-height: 6rem;
+    min-width: 7rem;
+    min-height: 7rem;
   }
   .draggable:hover {
     animation-name: hoverColor;
