@@ -61,7 +61,7 @@ const Form = ({ onSubmitHandler, formErrors }) => {
       <button>{isLogin() ? "Login" : "Register"}</button>
       <p>
         {isLogin() ? "Don't" : "Already"} have an account?{" "}
-        <Link to={isLogin() ? "/register" : "/login"}>
+        <Link id="signup-link" to={isLogin() ? "/register" : "/login"}>
           {isLogin() ? "Sign Up" : "Sign In"}
         </Link>
       </p>

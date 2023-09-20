@@ -5,6 +5,8 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Ubuntu", sans-serif;
+  --primaryColor: #dde7c7;
+  --secondaryColor: #4646ff;
 }
 
 :root {
@@ -18,7 +20,23 @@
 }
 
 button {
+  background-color: var(--secondaryColor);
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  align-self: center;
+  box-shadow: 0px 2px 3px black;
+  font-size: 0.8rem;
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 1px solid black;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+@media (min-width: 1280px) {
+  :root {
+    font-size: 1.5rem;
+  }
 }

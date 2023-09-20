@@ -1,5 +1,5 @@
 #form-container {
-  border: 1px solid black;
+  border: 2px solid black;
   border-radius: 10px;
   align-self: center;
   display: flex;
@@ -9,10 +9,19 @@
   width: 90%;
   padding: 10px;
   margin: auto 0;
+  color: white;
+  background-color: var(--secondaryColor);
+  box-shadow: 0px 3px 3px black;
 }
 
 #form-container h2 {
   margin: 20px;
+  font-size: 1.75rem;
+  text-shadow: 2px 2px 1px black;
+  border-bottom: 2px solid black;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 10px;
 }
 
 #form-container label,
@@ -22,6 +31,7 @@
 
 #form-container label {
   font-size: 0.9rem;
+  text-shadow: 2px 2px 1px black;
 }
 
 #form-container input {
@@ -35,12 +45,23 @@
 
 #form-container input:focus {
   outline: none;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 #form-container button {
   margin: 10px;
   padding: 5px 40px;
+  background-color: white;
+  color: black;
+  text-shadow: none;
+}
+
+#signup-link:visited {
+  color: white;
+}
+
+#signup-link:visited {
+  color: white;
 }
 
 #form-container p {
@@ -58,8 +79,17 @@
   border-radius: 5px;
   width: 90%;
   margin-bottom: 10px;
+  text-shadow: none;
+  font-weight: 800;
+  border: 1px solid black;
 }
 
 .error-msg::before {
   content: "- ";
+}
+
+@media (min-width: 900px) {
+  #form-container {
+    width: 700px;
+  }
 }

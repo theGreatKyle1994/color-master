@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { globalContext } from "../App";
 import logout from "../utils/logout";
 import { getHexValue, getRGBValue } from "../utils/colorEngine";
@@ -10,7 +10,8 @@ const Color = () => {
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const editID = path.split("/")[3];
-  const { setUserData, setIsAuthenticated } = useContext(globalContext);
+  const { setUserData, setIsAuthenticated, isAuthenticated } =
+    useContext(globalContext);
   const [color, setColor] = useState({
     r: "0",
     g: "0",
@@ -107,15 +108,17 @@ const Color = () => {
   }, []);
 
   return (
-    <>
+    <section id="color-container">
       <div
         id="color"
         style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b}` }}
       ></div>
       <form onSubmit={submitHandler}>
-        <div>
-          <label htmlFor="form-color-r">Red:</label>
+        <div className="color-input-container">
+          <label>Red</label>
           <input
+            className="color-input"
+            style={{ accentColor: "red" }}
             onChange={formSingleSliderColorHandler}
             type="range"
             name="r"
@@ -125,9 +128,11 @@ const Color = () => {
           />
           <span>{color.r}</span>
         </div>
-        <div>
-          <label htmlFor="form-color-g">Green:</label>
+        <div className="color-input-container">
+          <label>Green</label>
           <input
+            className="color-input"
+            style={{ accentColor: "green" }}
             onChange={formSingleSliderColorHandler}
             type="range"
             name="g"
@@ -137,9 +142,11 @@ const Color = () => {
           />
           <span>{color.g}</span>
         </div>
-        <div>
-          <label htmlFor="form-color-b">Blue:</label>
+        <div className="color-input-container">
+          <label>Blue</label>
           <input
+            className="color-input"
+            style={{ accentColor: "blue" }}
             onChange={formSingleSliderColorHandler}
             type="range"
             name="b"
@@ -150,14 +157,19 @@ const Color = () => {
           <span>{color.b}</span>
         </div>
         <input
+          id="color-input-graph"
           onChange={formColorHandler}
           name="color"
           type="color"
           value={getHexValue(color)}
         />
-        <button type="submit">{editID ? "Edit " : "Add "}Color</button>
+        {isAuthenticated ? (
+          <button type="submit">{editID ? "Edit " : "Add "}Color</button>
+        ) : (
+          <Link to={"/login"}>Login to add/edit a color</Link>
+        )}
       </form>
-    </>
+    </section>
   );
 };
 

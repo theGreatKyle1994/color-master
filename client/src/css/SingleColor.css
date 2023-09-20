@@ -5,22 +5,39 @@
   word-wrap: break-word;
   list-style: none;
   user-select: none;
-  padding: 10px;
   margin: 5px;
-  border: 1px solid black;
+  border: 2px solid black;
   border-radius: 10px;
   height: 75px;
   display: inline;
-  min-width: 100px;
-  max-width: 100px;
-  min-height: 100px;
-  max-height: 100px;
+  min-width: 4rem;
+  min-height: 4rem;
+  box-shadow: 0px 3px 5px black;
 }
 
-h2 {
-  margin-top: 10px;
+.draggable:hover {
+  animation-name: hoverColor;
+  animation-duration: 250ms;
+  animation-fill-mode: forwards;
 }
 
-button {
-  margin-top: 10px;
+@media (min-width: 1300px) {
+  .draggable {
+    min-width: 7rem;
+    min-height: 7rem;
+  }
+  .draggable:hover {
+    animation-name: hoverColor;
+    animation-duration: 250ms;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes hoverColor {
+  from {
+    border: 2px solid black;
+  }
+  to {
+    border: 4px dashed white;
+  }
 }

@@ -34,18 +34,10 @@ const SingleColor = ({ index, color, isFav }) => {
             onMouseOut={() => {
               if (isFav) setIsHovered(false);
             }}
-          >
-            <button
-              onClick={() => navigate(`/color/edit/${_id}`)}
-              style={{ display: isHovered ? "inline" : "none" }}
-            >
-              Edit
-            </button>
-            <div>
-              rgb({color.r}, {color.g}, {color.b})
-            </div>
-            <div>id: {_id}</div>
-          </li>
+            onClick={() => {
+              if (isFav) navigate(`/color/edit/${_id}`);
+            }}
+          ></li>
         );
       }}
     </Draggable>

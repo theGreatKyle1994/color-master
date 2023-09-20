@@ -12,8 +12,8 @@ const ColorList = () => {
   const { userData, setUserData, isAuthenticated, setIsAuthenticated } =
     useContext(globalContext);
   const [colorLists, setColorLists] = useState({
-    mainList: [...generateSingleColors(5)],
-    mainList2: [...generateSingleColors(5)],
+    mainList: [...generateSingleColors(20)],
+    mainList2: [...generateSingleColors(20)],
     favList: [],
     newColor: "",
     delColor: "",
@@ -128,7 +128,7 @@ const ColorList = () => {
       <Droppable droppableId="main-list" direction="horizontal">
         {(provided) => (
           <>
-            <h2>Main List</h2>
+            <h2 className="list-header">Main List</h2>
             <ul ref={provided.innerRef} className="drop-container">
               {colorLists.mainList &&
                 colorLists.mainList.map((color, index) => (
@@ -164,9 +164,9 @@ const ColorList = () => {
         <Droppable droppableId="fav-list" direction="horizontal">
           {(provided) => (
             <>
-              <h2>Fav List</h2>
+              <h2 className="list-header">Fav List</h2>
               <ul ref={provided.innerRef} className="drop-container">
-                {colorLists.favList && colorLists.favList.length !== 0 ? (
+                {colorLists.favList && (
                   <>
                     {colorLists.favList.map((color, index) => (
                       <SingleColor
@@ -177,8 +177,6 @@ const ColorList = () => {
                       />
                     ))}
                   </>
-                ) : (
-                  <p id="fav-placeholder">Get Favs!</p>
                 )}
                 {provided.placeholder}
               </ul>
