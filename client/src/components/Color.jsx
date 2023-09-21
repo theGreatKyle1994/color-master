@@ -112,7 +112,18 @@ const Color = () => {
       <div
         id="color"
         style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b}` }}
-      ></div>
+      >
+        <div className="outter-hex-val-container">
+          <div
+            className="hex-val"
+            onClick={() => {
+              navigator.clipboard.writeText(getHexValue(color));
+            }}
+          >
+            {getHexValue(color)}
+          </div>
+        </div>
+      </div>
       <form onSubmit={submitHandler}>
         <div className="color-input-container">
           <label>Red</label>
@@ -164,10 +175,18 @@ const Color = () => {
           value={getHexValue(color)}
         />
         {isAuthenticated ? (
-          <button type="submit">{editID ? "Edit " : "Add "}Color</button>
+          <button type="submit">{editID ? "Update " : "Add "}Color</button>
         ) : (
           <Link to={"/login"}>Login to add/edit a color</Link>
         )}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/home");
+          }}
+        >
+          Go Back
+        </button>
       </form>
     </section>
   );

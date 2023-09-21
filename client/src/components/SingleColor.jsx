@@ -1,6 +1,7 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
+import { getHexValue } from "../utils/colorEngine";
 import { v4 as uuid } from "uuid";
 import "../css/SingleColor.css";
 
@@ -37,7 +38,18 @@ const SingleColor = ({ index, color, isFav }) => {
             onClick={() => {
               if (isFav) navigate(`/color/edit/${_id}`);
             }}
-          ></li>
+          >
+            <div className="outter-hex-val-container">
+              <div
+                className="hex-val"
+                onClick={() => {
+                  navigator.clipboard.writeText(getHexValue(color));
+                }}
+              >
+                {getHexValue(color)}
+              </div>
+            </div>
+          </li>
         );
       }}
     </Draggable>
