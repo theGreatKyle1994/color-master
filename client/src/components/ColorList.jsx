@@ -24,9 +24,14 @@ const ColorList = () => {
     if (userData.id) {
       (async () => {
         await axios
-          .get(`http://localhost:8000/api/colors`, {
-            withCredentials: true,
-          })
+          .get(
+            `${import.meta.env.VITE_BACKEND_HOST}:${
+              import.meta.env.VITE_BACKEND_PORT
+            }/api/colors`,
+            {
+              withCredentials: true,
+            }
+          )
           .then((res) =>
             setUserData((prevData) => ({ ...prevData, colors: res.data }))
           )
@@ -65,7 +70,9 @@ const ColorList = () => {
       (async () => {
         await axios
           .delete(
-            `http://localhost:8000/api/colors/${colorLists.delColor._id}`,
+            `${import.meta.env.VITE_BACKEND_HOST}:${
+              import.meta.env.VITE_BACKEND_PORT
+            }/api/colors/${colorLists.delColor._id}`,
             {
               withCredentials: true,
             }
@@ -99,9 +106,15 @@ const ColorList = () => {
         // The color id is needed for deletion, we use this request to override the local
         // version with the db version and keep its placement in the list
         await axios
-          .post("http://localhost:8000/api/colors", colorLists.newColor, {
-            withCredentials: true,
-          })
+          .post(
+            `${import.meta.env.VITE_BACKEND_HOST}:${
+              import.meta.env.VITE_BACKEND_PORT
+            }/api/colors`,
+            colorLists.newColor,
+            {
+              withCredentials: true,
+            }
+          )
           .then((res) => {
             setColorLists((prevLists) => ({
               ...prevLists,
