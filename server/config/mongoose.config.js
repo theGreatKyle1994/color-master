@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const db = "color_master_db";
 
 mongoose
-  .connect(`mongodb://127.0.0.1:27017/${db}`, {
+  // .connect(`mongodb://127.0.0.1:27017/${db}`, {
+  .connect(`${process.env.DB_URI}${db}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
