@@ -45,7 +45,7 @@ const Color = () => {
     if (!editID) {
       await axios
         .post(
-          `${import.meta.env.VITE_BACKEND_HOST}:${
+          `http://${import.meta.env.VITE_BACKEND_HOST}:${
             import.meta.env.VITE_BACKEND_PORT
           }/api/colors`,
           color,
@@ -67,7 +67,7 @@ const Color = () => {
     } else {
       await axios
         .patch(
-          `${import.meta.env.VITE_BACKEND_HOST}:${
+          `http://${import.meta.env.VITE_BACKEND_HOST}:${
             import.meta.env.VITE_BACKEND_PORT
           }/api/colors/${editID}`,
           color,

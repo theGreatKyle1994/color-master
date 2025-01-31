@@ -25,7 +25,7 @@ const ColorList = () => {
       (async () => {
         await axios
           .get(
-            `${import.meta.env.VITE_BACKEND_HOST}:${
+            `http://${import.meta.env.VITE_BACKEND_HOST}:${
               import.meta.env.VITE_BACKEND_PORT
             }/api/colors`,
             {

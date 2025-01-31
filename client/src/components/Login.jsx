@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     await axios
       .post(
-        `${import.meta.env.VITE_BACKEND_HOST}:${
+        `http://${import.meta.env.VITE_BACKEND_HOST}:${
           import.meta.env.VITE_BACKEND_PORT
         }/api/login`,
         data,
