@@ -16,15 +16,9 @@ const Login = () => {
   const onSubmitHandler = async (e, data) => {
     e.preventDefault();
     await axios
-      .post(
-        `http://${import.meta.env.VITE_BACKEND_HOST}:${
-          import.meta.env.VITE_BACKEND_PORT
-        }/api/login`,
-        data,
-        {
-          withCredentials: true,
-        }
-      )
+      .post(`${import.meta.env.VITE_BACKEND_HOST}/api/login`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
         // Setting local data for application
         const userData = {

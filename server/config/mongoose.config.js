@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 const db = "color_master_db";
+const db_uri =
+  process.env.NODE_ENV == "production"
+    ? process.env.DB_URI
+    : process.env.DB_URI_DEV;
+console.log(db_uri);
 
 mongoose
-  // .connect(`mongodb://127.0.0.1:27017/${db}`, {
-  .connect(`${process.env.DB_URI}${db}`, {
+  .connect(`${db_uri}${db}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

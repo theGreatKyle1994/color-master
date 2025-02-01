@@ -2,8 +2,8 @@
   "name": "color-master-server",
   "type": "commonjs",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "env NODE_ENV=development nodemon server.js",
+    "start": "env NODE_ENV=production node server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

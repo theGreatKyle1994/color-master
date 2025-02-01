@@ -24,14 +24,9 @@ const ColorList = () => {
     if (userData.id) {
       (async () => {
         await axios
-          .get(
-            `http://${import.meta.env.VITE_BACKEND_HOST}:${
-              import.meta.env.VITE_BACKEND_PORT
-            }/api/colors`,
-            {
-              withCredentials: true,
-            }
-          )
+          .get(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`, {
+            withCredentials: true,
+          })
           .then((res) =>
             setUserData((prevData) => ({ ...prevData, colors: res.data }))
           )
@@ -70,9 +65,9 @@ const ColorList = () => {
       (async () => {
         await axios
           .delete(
-            `${import.meta.env.VITE_BACKEND_HOST}:${
-              import.meta.env.VITE_BACKEND_PORT
-            }/api/colors/${colorLists.delColor._id}`,
+            `${import.meta.env.VITE_BACKEND_HOST}/api/colors/${
+              colorLists.delColor._id
+            }`,
             {
               withCredentials: true,
             }
@@ -107,9 +102,7 @@ const ColorList = () => {
         // version with the db version and keep its placement in the list
         await axios
           .post(
-            `${import.meta.env.VITE_BACKEND_HOST}:${
-              import.meta.env.VITE_BACKEND_PORT
-            }/api/colors`,
+            `${import.meta.env.VITE_BACKEND_HOST}/api/colors`,
             colorLists.newColor,
             {
               withCredentials: true,

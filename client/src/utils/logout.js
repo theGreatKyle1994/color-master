@@ -4,9 +4,7 @@ import axios from "axios";
 const logout = async (setIsAuthenticated, setUserData) => {
   await axios
     .post(
-      `${import.meta.env.VITE_BACKEND_HOST}:${
-        import.meta.env.VITE_BACKEND_PORT
-      }/api/logout`,
+      `${import.meta.env.VITE_BACKEND_HOST}/api/logout`,
       {},
       { withCredentials: true }
     )

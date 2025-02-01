@@ -44,15 +44,9 @@ const Color = () => {
     e.preventDefault();
     if (!editID) {
       await axios
-        .post(
-          `http://${import.meta.env.VITE_BACKEND_HOST}:${
-            import.meta.env.VITE_BACKEND_PORT
-          }/api/colors`,
-          color,
-          {
-            withCredentials: true,
-          }
-        )
+        .post(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`, color, {
+          withCredentials: true,
+        })
         .then((res) => {
           setUserData((prevUserData) => ({
             ...prevUserData,
@@ -67,9 +61,7 @@ const Color = () => {
     } else {
       await axios
         .patch(
-          `http://${import.meta.env.VITE_BACKEND_HOST}:${
-            import.meta.env.VITE_BACKEND_PORT
-          }/api/colors/${editID}`,
+          `${import.meta.env.VITE_BACKEND_HOST}/api/colors/${editID}`,
           color,
           {
             withCredentials: true,
@@ -101,14 +93,9 @@ const Color = () => {
     if (editID) {
       (async () => {
         await axios
-          .get(
-            `${import.meta.env.VITE_BACKEND_HOST}:${
-              import.meta.env.VITE_BACKEND_PORT
-            }/api/colors/${editID}`,
-            {
-              withCredentials: true,
-            }
-          )
+          .get(`${import.meta.env.VITE_BACKEND_HOST}/api/colors/${editID}`, {
+            withCredentials: true,
+          })
           .then((res) => {
             setColor({
               r: res.data.r,
