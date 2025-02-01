@@ -22,8 +22,8 @@ module.exports = {
           res
             .status(201)
             .cookie("userToken", userToken, {
-              httpOnly: true,
-              maxAge: 2000 * 60 * 60,
+              // httpOnly: true,
+              expires: new Date(Date.now() + 2000 * 60 * 60),
             })
             .json(newUser);
         })
@@ -40,7 +40,9 @@ module.exports = {
   // Login user
   loginUser: async (req, res) => {
     //* Populate user's color and palette arrays with colors and palettes that match the IDs in the arrays
-    const potentialUser = await User.findOne({ username: req.body.username }).populate("colors").populate("colorPalettes");
+    const potentialUser = await User.findOne({ username: req.body.username })
+      .populate("colors")
+      .populate("colorPalettes");
     // If user exists prepare to compare passwords
     if (potentialUser) {
       // Compare passwords
@@ -55,8 +57,8 @@ module.exports = {
         res
           .status(201)
           .cookie("userToken", userToken, {
-            httpOnly: true,
-            maxAge: 2000 * 60 * 60,
+            // httpOnly: true,
+            expires: new Date(Date.now() + 2000 * 60 * 60),
           })
           .json(potentialUser);
       } else {
