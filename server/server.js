@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: `${process.env.CLIENT_HOST}`,
+    origin: true,
   })
 );
 app.use(express.json(), express.urlencoded({ extended: true }));
