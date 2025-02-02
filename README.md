@@ -26,3 +26,7 @@ To start the backend, run in terminal at /server:
 ```
 nodemon server.js
 ```
+
+## Preview Live Site
+
+[Live Site](http://color-master-frontend.s3-website-us-east-1.amazonaws.com)
