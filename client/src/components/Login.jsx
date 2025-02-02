@@ -19,11 +19,12 @@ const Login = () => {
     await axios
       .post(`${import.meta.env.VITE_BACKEND_HOST}/api/login`, data)
       .then((res) => {
-        // Setting local data for application
+        // Setting token in localStorage
         const token = res.data;
+        sessionStorage.setItem("token", JSON.stringify({ token: token }));
+        // Setting local data for application
         const userData = jwtDecode(res.data);
-        // Setting session info for login outliving page refreshes
-        sessionStorage.setItem("userInfo", JSON.stringify({ token: token }));
+        sessionStorage.setItem("userInfo", JSON.stringify(userData));
         setUserData(userData);
         setIsAuthenticated(true);
         navigate("/home");
