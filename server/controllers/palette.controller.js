@@ -6,7 +6,7 @@ module.exports.addPalette = async (req, res) => {
     try{
         const newPalette = await Palette.create(req.body);
         //* After adding palette to palette collection, add new palette to the user's palette array
-        const updatedUser = await User.findByIdAndUpdate(newPalette.userId, {$addToSet: {colorPalettes: newPalette._id}})
+        await User.findByIdAndUpdate(newPalette.userId, {$addToSet: {colorPalettes: newPalette._id}})
         res.json(newPalette)
     }
     catch(err){

@@ -78,10 +78,7 @@ module.exports = {
   },
   // Logout user
   logoutUser: (req, res) => {
-    res
-      .status(200)
-      .clearCookie("userToken")
-      .json({ message: "logout successful" });
+    res.status(200).json({ message: "logout successful" });
   },
 };
 

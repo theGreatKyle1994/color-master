@@ -21,7 +21,7 @@ const Login = () => {
       .then((res) => {
         // Setting token in sessionStorage
         const token = res.data;
-        sessionStorage.setItem("token", JSON.stringify({ token: token }));
+        sessionStorage.setItem("token", JSON.stringify(token));
         // Setting local data for application
         const userData = jwtDecode(res.data);
         sessionStorage.setItem("userInfo", JSON.stringify(userData));

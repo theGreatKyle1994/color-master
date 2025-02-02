@@ -4,6 +4,7 @@ import { globalContext } from "../App";
 import logout from "../utils/logout";
 import { getHexValue, getRGBValue } from "../utils/colorEngine";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import "../css/Color.css";
 
 const Color = () => {
@@ -44,8 +45,9 @@ const Color = () => {
     e.preventDefault();
     if (!editID) {
       await axios
-        .post(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`, color, {
-          withCredentials: true,
+        .post(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`, {
+          color,
+          token: JSON.parse(sessionStorage.getItem("token")),
         })
         .then((res) => {
           setUserData((prevUserData) => ({
@@ -62,10 +64,7 @@ const Color = () => {
       await axios
         .patch(
           `${import.meta.env.VITE_BACKEND_HOST}/api/colors/${editID}`,
-          color,
-          {
-            withCredentials: true,
-          }
+          color
         )
         .then((res) => {
           setUserData((prevUserData) => ({
@@ -93,9 +92,7 @@ const Color = () => {
     if (editID) {
       (async () => {
         await axios
-          .get(`${import.meta.env.VITE_BACKEND_HOST}/api/colors/${editID}`, {
-            withCredentials: true,
-          })
+          .get(`${import.meta.env.VITE_BACKEND_HOST}/api/colors/${editID}`)
           .then((res) => {
             setColor({
               r: res.data.r,
