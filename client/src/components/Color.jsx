@@ -4,7 +4,6 @@ import { globalContext } from "../App";
 import logout from "../utils/logout";
 import { getHexValue, getRGBValue } from "../utils/colorEngine";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import "../css/Color.css";
 
 const Color = () => {
@@ -62,10 +61,10 @@ const Color = () => {
         });
     } else {
       await axios
-        .patch(
-          `${import.meta.env.VITE_BACKEND_HOST}/api/colors/${editID}`,
-          color
-        )
+        .patch(`${import.meta.env.VITE_BACKEND_HOST}/api/colors/${editID}`, {
+          color,
+          token: JSON.parse(sessionStorage.getItem("token")),
+        })
         .then((res) => {
           setUserData((prevUserData) => ({
             ...prevUserData,
