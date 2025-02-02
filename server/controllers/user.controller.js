@@ -49,18 +49,17 @@ module.exports = {
       if (await bcrypt.compare(req.body.password, potentialUser.password)) {
         // Create token on password match
         const userToken = jwt.sign(
-          { _id: potentialUser._id, username: potentialUser.username },
+          {
+            _id: potentialUser._id,
+            username: potentialUser.username,
+            colors: potentialUser.colors,
+            colorPalettes: potentialUser.colorPalettes,
+          },
           secret,
           { expiresIn: "1h" }
         );
-        // Respond with user data and token
-        res
-          .status(201)
-          .cookie("userToken", userToken, {
-            // httpOnly: true,
-            expires: new Date(Date.now() + 2000 * 60 * 60),
-          })
-          .json(potentialUser);
+        // Respond with token
+        res.status(201).json(userToken);
       } else {
         // On incorrect password, respond with error messages
         res.status(400).json({
