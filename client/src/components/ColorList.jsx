@@ -65,7 +65,8 @@ const ColorList = () => {
           .delete(
             `${import.meta.env.VITE_BACKEND_HOST}/api/colors/${
               colorLists.delColor._id
-            }`
+            }`,
+            { data: { token: JSON.parse(sessionStorage.getItem("token")) } }
           )
           .then(() => {
             setColorLists((prevLists) => ({
