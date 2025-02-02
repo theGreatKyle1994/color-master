@@ -14,18 +14,17 @@ module.exports = {
         .then((newUser) => {
           // Generate token on successful register
           const userToken = jwt.sign(
-            { _id: newUser._id, username: newUser.username },
+            {
+              _id: newUser._id,
+              username: newUser.username,
+              colors: newUser.colors,
+              colorPalettes: newUser.colorPalettes,
+            },
             secret,
             { expiresIn: "1h" }
           );
           // Return new user and token
-          res
-            .status(201)
-            .cookie("userToken", userToken, {
-              // httpOnly: true,
-              expires: new Date(Date.now() + 2000 * 60 * 60),
-            })
-            .json(newUser);
+          res.status(201).json(userToken);
         })
         .catch((err) => res.status(400).json(err));
     } else {

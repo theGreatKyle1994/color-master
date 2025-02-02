@@ -3,6 +3,7 @@ import axios from "axios";
 import Form from "./Form";
 import { useContext, useState } from "react";
 import { globalContext } from "../App";
+import { jwtDecode } from "jwt-decode";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -17,18 +18,13 @@ const Register = () => {
   const onSubmitHandler = async (e, data) => {
     e.preventDefault();
     await axios
-      .post(`${import.meta.env.VITE_BACKEND_HOST}/api/register`, data, {
-        withCredentials: true,
-      })
+      .post(`${import.meta.env.VITE_BACKEND_HOST}/api/register`, data)
       .then((res) => {
+        // Setting token in sessionStorage
+        const token = res.data;
+        sessionStorage.setItem("token", JSON.stringify({ token: token }));
         // Setting local data for application
-        const userData = {
-          id: res.data._id,
-          username: res.data.username,
-          colors: res.data.colors,
-          colorPalettes: res.data.colorPalettes,
-        };
-        // Setting session info for login outliving page refreshes
+        const userData = jwtDecode(res.data);
         sessionStorage.setItem("userInfo", JSON.stringify(userData));
         setUserData(userData);
         setIsAuthenticated(true);

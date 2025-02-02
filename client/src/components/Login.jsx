@@ -19,7 +19,7 @@ const Login = () => {
     await axios
       .post(`${import.meta.env.VITE_BACKEND_HOST}/api/login`, data)
       .then((res) => {
-        // Setting token in localStorage
+        // Setting token in sessionStorage
         const token = res.data;
         sessionStorage.setItem("token", JSON.stringify({ token: token }));
         // Setting local data for application
