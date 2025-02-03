@@ -4,10 +4,9 @@ const User = require("../models/user.model");
 // Add Favorite Color -> userId is included in the req.body by the authentication middleware
 module.exports.addColor = async (req, res) => {
   try {
-    console.log(req.body);
-    const newColor = await Color.create(req.body.color);
+    const newColor = await Color.create(req.body);
     //* After adding color to color collection, add new color to the user's color array
-    await User.findByIdAndUpdate(req.body.userId, {
+    await User.findByIdAndUpdate(newColor.userId, {
       $addToSet: { colors: newColor._id },
     });
     res.json(newColor);

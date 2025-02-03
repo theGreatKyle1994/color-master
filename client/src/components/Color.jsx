@@ -44,9 +44,8 @@ const Color = () => {
     e.preventDefault();
     if (!editID) {
       await axios
-        .post(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`, {
-          color,
-          token: JSON.parse(sessionStorage.getItem("token")),
+        .post(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`, color, {
+          withCredentials: true,
         })
         .then((res) => {
           setUserData((prevUserData) => ({
