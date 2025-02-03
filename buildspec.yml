@@ -13,7 +13,7 @@ phases:
   build:
     commands:
       - echo Deploying backend...
-      - cd server && npm start
+      - npm start
       - echo Building frontend...
       - cd .. && cd client && npm run build
   post_build:
