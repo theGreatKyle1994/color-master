@@ -23,6 +23,6 @@ app.use(
 //! and Chris will be sad
 require("./routes/user.routes")(app);
 require("./routes/color.routes")(app);
-require("./routes/palette.routes")(app);
+// require("./routes/palette.routes")(app);
 
 app.listen(port, () => console.log(`Server live on port: ${port}`));
