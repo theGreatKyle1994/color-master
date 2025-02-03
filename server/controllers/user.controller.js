@@ -39,26 +39,30 @@ module.exports = {
   // Login user
   loginUser: async (req, res) => {
     //* Populate user's color and palette arrays with colors and palettes that match the IDs in the arrays
-    const potentialUser = await User.findOne({ username: req.body.username })
-      .populate("colors")
-      .populate("colorPalettes");
+    const potentialUser = await User.findOne({
+      username: req.body.username,
+    }).populate("colors");
+    // .populate("colorPalettes");
     // If user exists prepare to compare passwords
     if (potentialUser) {
       // Compare passwords
       if (await bcrypt.compare(req.body.password, potentialUser.password)) {
         // Create token on password match
-        const userToken = jwt.sign(
-          {
-            _id: potentialUser._id,
+        const userToken = jwt.sign({ _id: potentialUser._id }, secret, {
+          expiresIn: "1h",
+        });
+        // Respond with cookie and json
+        res
+          .status(201)
+          .cookie("userToken", userToken, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60,
+          })
+          .json({
             username: potentialUser.username,
             colors: potentialUser.colors,
-            colorPalettes: potentialUser.colorPalettes,
-          },
-          secret,
-          { expiresIn: "1h" }
-        );
-        // Respond with token
-        res.status(201).json(userToken);
+            // colorPalettes: potentialUser.colorPalettes,
+          });
       } else {
         // On incorrect password, respond with error messages
         res.status(400).json({
