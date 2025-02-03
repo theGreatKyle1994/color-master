@@ -3,7 +3,7 @@ const secret = process.env.FIRST_SECRET_KEY;
 
 //middleware to authenticate user when requests are made
 module.exports.authenticate = (req, res, next) => {
-  jwt.verify(req.body.token, secret, (err, payload) => {
+  jwt.verify(req.cookies.userToken, secret, (err, payload) => {
     if (err) {
       res.status(401).json({ verified: false });
     } else {
