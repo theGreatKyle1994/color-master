@@ -13,18 +13,21 @@ module.exports = {
       await User.create(req.body)
         .then((newUser) => {
           // Generate token on successful register
-          const userToken = jwt.sign(
-            {
-              _id: newUser._id,
+          const userToken = jwt.sign({ _id: newUser._id }, secret, {
+            expiresIn: "1h",
+          });
+          // Return new user and token
+          res
+            .status(201)
+            .cookie("userToken", userToken, {
+              httpOnly: true,
+              maxAge: 1000 * 60 * 60,
+            })
+            .json({
               username: newUser.username,
               colors: newUser.colors,
-              colorPalettes: newUser.colorPalettes,
-            },
-            secret,
-            { expiresIn: "1h" }
-          );
-          // Return new user and token
-          res.status(201).json(userToken);
+              // colorPalettes: newUser.colorPalettes,
+            });
         })
         .catch((err) => res.status(400).json(err));
     } else {
