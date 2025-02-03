@@ -9,7 +9,10 @@ require("./config/mongoose.config");
 require("./config/jwt.config");
 
 app.use(
-  cors({ origin: process.env.CLIENT_ORIGIN || "http://localhost:5000" }),
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5000",
+    credentials: true,
+  }),
   cookieParser(),
   express.json(),
   express.urlencoded({ extended: true })
