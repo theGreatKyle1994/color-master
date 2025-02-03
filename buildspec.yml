@@ -4,11 +4,16 @@ phases:
   install:
     runtime-versions:
       nodejs: 22
+  pre_build:
     commands:
-      - cd client
-      - npm i
-      - npm run build
-      - cd ..
-      - cd server
-      - npm i
+      - echo Installing frontend dependencies...
+      - cd client && npm install
+      - echo  Installing backend dependencies...
+      - cd .. && cd server && npm install
+  build:
+    commands:
+      - echo Deploying backend...
       - npm start
+  post_build:
+    commands:
+      - echo Deployment completed
