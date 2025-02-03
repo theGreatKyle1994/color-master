@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+  pre_build:
+    commands:
+      - cd client
+      - npm i
+      - npm run build
+      - cd ..
+      - cd server
+      - npm i
+      - npm start
