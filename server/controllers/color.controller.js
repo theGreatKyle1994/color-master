@@ -35,7 +35,7 @@ module.exports.findOneColor = (req, res) => {
 
 // Update One Color
 module.exports.updateColor = (req, res) => {
-  Color.findOneAndUpdate({ _id: req.params.id }, req.body.color, {
+  Color.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
     runValidators: true,
   })
