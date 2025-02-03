@@ -53,7 +53,7 @@ module.exports.deleteColor = async (req, res) => {
     await User.findByIdAndUpdate(req.body.userId, {
       $pull: { colors: req.params.id },
     });
-    res.json(deletedColor);
+    res.json();
   } catch (err) {
     res.status(400).json({ message: "Error Deleting Color", error: err });
   }
