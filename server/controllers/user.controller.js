@@ -26,7 +26,7 @@ module.exports = {
             .json({
               username: newUser.username,
               colors: newUser.colors,
-              colorPalettes: newUser.colorPalettes,
+              // colorPalettes: newUser.colorPalettes,
             });
         })
         .catch((err) => res.status(400).json(err));
@@ -44,9 +44,8 @@ module.exports = {
     //* Populate user's color and palette arrays with colors and palettes that match the IDs in the arrays
     const potentialUser = await User.findOne({
       username: req.body.username,
-    })
-      .populate("colors")
-      .populate("colorPalettes");
+    }).populate("colors");
+    // .populate("colorPalettes");
     // If user exists prepare to compare passwords
     if (potentialUser) {
       // Compare passwords
@@ -65,7 +64,7 @@ module.exports = {
           .json({
             username: potentialUser.username,
             colors: potentialUser.colors,
-            colorPalettes: potentialUser.colorPalettes,
+            // colorPalettes: potentialUser.colorPalettes,
           });
       } else {
         // On incorrect password, respond with error messages

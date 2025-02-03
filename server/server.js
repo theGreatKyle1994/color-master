@@ -18,9 +18,6 @@ app.use(
   express.urlencoded({ extended: true })
 );
 
-//! routes has to be after everything else
-//! if this is moved the app will break
-//! and Chris will be sad
 require("./routes/user.routes")(app);
 require("./routes/color.routes")(app);
 // require("./routes/palette.routes")(app);

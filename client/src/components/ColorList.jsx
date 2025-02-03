@@ -24,7 +24,9 @@ const ColorList = () => {
     if (userData.id) {
       (async () => {
         await axios
-          .get(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`)
+          .get(`${import.meta.env.VITE_BACKEND_HOST}/api/colors`, {
+            withCredentials: true,
+          })
           .then((res) =>
             setUserData((prevData) => ({ ...prevData, colors: res.data }))
           )

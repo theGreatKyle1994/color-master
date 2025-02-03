@@ -6,7 +6,7 @@ module.exports = (app) => {
   //* Add favorite color for user
   app.post("/api/colors", authenticate, ColorController.addColor);
   //* Find all colors associated with user
-  app.get("/api/colors", ColorController.findAllColors);
+  app.get("/api/colors", authenticate, ColorController.findAllColors);
   //* Find one color by its Id
   app.get("/api/colors/:id", ColorController.findOneColor);
   //* Find and update Color by its Id
