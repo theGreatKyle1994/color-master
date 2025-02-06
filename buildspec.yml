@@ -13,4 +13,4 @@ phases:
       - cd .. && npm run build
   post_build:
     commands:
-      - echo Build successful on 'date'
+      - echo Build successful on `date`
