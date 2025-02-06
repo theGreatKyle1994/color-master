@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Installing frontend...
+      - npm install
+      - echo Installing backend...
+      - cd server && npm install
+  build:
+    commands:
+      - echo Starting frontend build...
+      - cd .. && npm run build
+  post_build:
+    commands:
+      - echo Build successful on 'date'
