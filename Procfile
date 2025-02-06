@@ -1,1 +1,1 @@
-web: sh -c 'cd server && npm start'
+worker: sh -c 'cd server && npm start'
