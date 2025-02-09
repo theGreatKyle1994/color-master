@@ -90,15 +90,15 @@ module.exports = {
 };
 
 //* Finds and displays all users
-// module.exports.findAllUsers = (req, res) => {
-//   User.find()
-//     .then((allUsers) => {
-//       res.json(allUsers);
-//     })
-//     .catch((err) => {
-//       res.status(400).json({ message: "Error Finding all Users", error: err });
-//     });
-// };
+module.exports.findAllUsers = (req, res) => {
+  User.find()
+    .then((allUsers) => {
+      res.json(allUsers);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: "Error Finding all Users", error: err });
+    });
+};
 
 //* Finds and displays one user
 // module.exports.findOneUser = (req, res) => {
