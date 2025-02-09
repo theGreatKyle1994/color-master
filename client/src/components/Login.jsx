@@ -3,7 +3,6 @@ import axios from "axios";
 import Form from "./Form";
 import { useContext, useState } from "react";
 import { globalContext } from "../App";
-import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,13 +16,12 @@ const Login = () => {
   const onSubmitHandler = async (e, data) => {
     e.preventDefault();
     await axios
-      .post(`${import.meta.env.VITE_BACKEND_HOST}/api/login`, data)
+      .post(`${import.meta.env.VITE_BACKEND_HOST}/api/login`, data, {
+        withCredentials: true,
+      })
       .then((res) => {
-        // Setting token in sessionStorage
-        const token = res.data;
-        sessionStorage.setItem("token", JSON.stringify(token));
         // Setting local data for application
-        const userData = jwtDecode(res.data);
+        const userData = res.data;
         sessionStorage.setItem("userInfo", JSON.stringify(userData));
         setUserData(userData);
         setIsAuthenticated(true);

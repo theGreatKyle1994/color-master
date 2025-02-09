@@ -8,9 +8,9 @@ module.exports = (app) => {
   //* Find all users
   app.get("/api/users", UserController.findAllUsers);
   //* Find one user
-  app.get("/api/users/:id", UserController.findOneUser);
+  // app.get("/api/users/:id", UserController.findOneUser);
   //* Update a user
-  app.patch("/api/users/:id", UserController.updateUser);
+  // app.patch("/api/users/:id", UserController.updateUser);
   //* Delete a user
-  app.delete("/api/users/:id", UserController.deleteUser);
+  // app.delete("/api/users/:id", UserController.deleteUser);
 };

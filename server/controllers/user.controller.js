@@ -13,18 +13,21 @@ module.exports = {
       await User.create(req.body)
         .then((newUser) => {
           // Generate token on successful register
-          const userToken = jwt.sign(
-            {
-              _id: newUser._id,
+          const userToken = jwt.sign({ _id: newUser._id }, secret, {
+            expiresIn: "1h",
+          });
+          // Return new user and token
+          res
+            .status(201)
+            .cookie("userToken", userToken, {
+              httpOnly: true,
+              maxAge: 1000 * 60 * 60,
+            })
+            .json({
               username: newUser.username,
               colors: newUser.colors,
-              colorPalettes: newUser.colorPalettes,
-            },
-            secret,
-            { expiresIn: "1h" }
-          );
-          // Return new user and token
-          res.status(201).json(userToken);
+              // colorPalettes: newUser.colorPalettes,
+            });
         })
         .catch((err) => res.status(400).json(err));
     } else {
@@ -39,26 +42,30 @@ module.exports = {
   // Login user
   loginUser: async (req, res) => {
     //* Populate user's color and palette arrays with colors and palettes that match the IDs in the arrays
-    const potentialUser = await User.findOne({ username: req.body.username })
-      .populate("colors")
-      .populate("colorPalettes");
+    const potentialUser = await User.findOne({
+      username: req.body.username,
+    }).populate("colors");
+    // .populate("colorPalettes");
     // If user exists prepare to compare passwords
     if (potentialUser) {
       // Compare passwords
       if (await bcrypt.compare(req.body.password, potentialUser.password)) {
         // Create token on password match
-        const userToken = jwt.sign(
-          {
-            _id: potentialUser._id,
+        const userToken = jwt.sign({ _id: potentialUser._id }, secret, {
+          expiresIn: "1h",
+        });
+        // Respond with cookie and json
+        res
+          .status(201)
+          .cookie("userToken", userToken, {
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60,
+          })
+          .json({
             username: potentialUser.username,
             colors: potentialUser.colors,
-            colorPalettes: potentialUser.colorPalettes,
-          },
-          secret,
-          { expiresIn: "1h" }
-        );
-        // Respond with token
-        res.status(201).json(userToken);
+            // colorPalettes: potentialUser.colorPalettes,
+          });
       } else {
         // On incorrect password, respond with error messages
         res.status(400).json({
@@ -82,8 +89,6 @@ module.exports = {
   },
 };
 
-//* The Rest of the CRUD operations
-
 //* Finds and displays all users
 module.exports.findAllUsers = (req, res) => {
   User.find()
@@ -96,37 +101,37 @@ module.exports.findAllUsers = (req, res) => {
 };
 
 //* Finds and displays one user
-module.exports.findOneUser = (req, res) => {
-  User.findOne({ _id: req.params.id })
-    .then((oneUser) => {
-      res.json(oneUser);
-    })
-    .catch((err) => {
-      res.status(400).json({ message: "Error Finding User", error: err });
-    });
-};
+// module.exports.findOneUser = (req, res) => {
+//   User.findOne({ _id: req.params.id })
+//     .then((oneUser) => {
+//       res.json(oneUser);
+//     })
+//     .catch((err) => {
+//       res.status(400).json({ message: "Error Finding User", error: err });
+//     });
+// };
 
 //* Updates a user w/ prefilled info
-module.exports.updateUser = (req, res) => {
-  User.findOneAndUpdate({ _id: req.params.id }, req.body, {
-    new: true,
-    runValidators: true,
-  })
-    .then((updatedUser) => {
-      res.json(updatedUser);
-    })
-    .catch((err) => {
-      res.status(400).json({ message: "Error Updating User", error: err });
-    });
-};
+// module.exports.updateUser = (req, res) => {
+//   User.findOneAndUpdate({ _id: req.params.id }, req.body, {
+//     new: true,
+//     runValidators: true,
+//   })
+//     .then((updatedUser) => {
+//       res.json(updatedUser);
+//     })
+//     .catch((err) => {
+//       res.status(400).json({ message: "Error Updating User", error: err });
+//     });
+// };
 
 //* Deletes a user
-module.exports.deleteUser = (req, res) => {
-  User.deleteOne({ _id: req.params.id })
-    .then((deletedUser) => {
-      res.json(deletedUser);
-    })
-    .catch((err) => {
-      res.status(400).json({ message: "Error Deleting User", error: err });
-    });
-};
+// module.exports.deleteUser = (req, res) => {
+//   User.deleteOne({ _id: req.params.id })
+//     .then((deletedUser) => {
+//       res.json(deletedUser);
+//     })
+//     .catch((err) => {
+//       res.status(400).json({ message: "Error Deleting User", error: err });
+//     });
+// };

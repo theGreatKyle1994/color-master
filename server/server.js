@@ -9,20 +9,17 @@ require("./config/mongoose.config");
 require("./config/jwt.config");
 
 app.use(
-  cors(),
+  cors({
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5000",
+    credentials: true,
+  }),
   cookieParser(),
   express.json(),
   express.urlencoded({ extended: true })
 );
 
-//! routes has to be after everything else
-//! if this is moved the app will break
-//! and Chris will be sad
-const UserRoutes = require("./routes/user.routes");
-const ColorRoutes = require("./routes/color.routes");
-const PaletteRoutes = require("./routes/palette.routes");
-UserRoutes(app);
-ColorRoutes(app);
-PaletteRoutes(app);
+require("./routes/user.routes")(app);
+require("./routes/color.routes")(app);
+// require("./routes/palette.routes")(app);
 
 app.listen(port, () => console.log(`Server live on port: ${port}`));
