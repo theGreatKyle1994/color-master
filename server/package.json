@@ -6,7 +6,8 @@
     "start": "env NODE_ENV=production pm2 start server.js",
     "restart": "env NODE_ENV=production pm2 restart server.js",
     "stop": "pm2 stop server.js",
-    "status": "pm2 status"
+    "status": "pm2 status",
+    "logs": "pm2 logs"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

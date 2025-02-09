@@ -6,6 +6,7 @@
     "start": "cd server && npm start",
     "restart": "cd server && npm run restart",
     "stop": "cd server && npm run stop",
-    "status": "cd server && npm run status"
+    "status": "cd server && npm run status",
+    "logs": "cd server && npm run logs"
   }
 }
