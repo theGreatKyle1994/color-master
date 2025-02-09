@@ -3,7 +3,10 @@
   "type": "commonjs",
   "scripts": {
     "dev": "env NODE_ENV=development nodemon server.js",
-    "start": "env NODE_ENV=production node server.js"
+    "start": "env NODE_ENV=production pm2 start server.js",
+    "restart": "env NODE_ENV=production pm2 restart server.js",
+    "stop": "pm2 stop server.js",
+    "status": "pm2 status"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -13,6 +16,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
+    "pm2": "^5.4.3",
     "validator": "^13.11.0"
   },
   "devDependencies": {
