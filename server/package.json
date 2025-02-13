@@ -3,8 +3,8 @@
   "type": "commonjs",
   "scripts": {
     "dev": "env NODE_ENV=development nodemon server.js",
-    "start": "env NODE_ENV=production pm2 start server.js",
-    "restart": "env NODE_ENV=production pm2 restart server.js",
+    "start": "env NODE_ENV=production pm2 start --update-env server.js",
+    "restart": "env NODE_ENV=production pm2 restart --update-env server.js",
     "stop": "pm2 stop server.js",
     "status": "pm2 status",
     "logs": "pm2 logs"
