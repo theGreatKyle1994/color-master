@@ -29,4 +29,4 @@ nodemon server.js
 
 ## Preview Live Site
 
-[Live Site](http://44.200.176.150/)
+[Live Site](http://3.231.219.230/)
